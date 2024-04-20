@@ -9,7 +9,7 @@ const initialState = {
   message: null,
 };
 
-//Get user details
+// Get user details, for edit data
 export const profile = createAsyncThunk(
   "user/profile",
   async (user, thunkAPI) => {
@@ -17,37 +17,44 @@ export const profile = createAsyncThunk(
 
     const data = await userService.profile(user, token);
 
+    console.log(data);
+
     return data;
   }
 );
 
 // Update user details
 export const updateProfile = createAsyncThunk(
-    "user/update",
-    async(user, thunkAPI) => {
-        const token = thunkAPI.getState().auth.user.token
+  "user/update",
+  async (user, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
 
-        const data = await userService.updateProfile(user, token)
+    const data = await userService.updateProfile(user, token);
 
-        // Check for errors
-        if(data.errors) {
-            return thunkAPI.rejectWithValue(data.errors[0])
-        }
-
-        return data;
+    // Check for errors
+    if (data.errors) {
+      return thunkAPI.rejectWithValue(data.errors[0]);
     }
+
+    console.log(data);
+
+    return data;
+  }
 );
 
 // Get user details
 export const getUserDetails = createAsyncThunk(
-    "user/get",
-    async(id, thunkAPI) => {
+  "user/get",
+  async (id, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
 
-        const data = await userService.getUserDetails(id)
+    const data = await userService.getUserDetails(id, token);
 
-        return data;
-    }
-)
+    console.log(data);
+
+    return data;
+  }
+);
 
 export const userSlice = createSlice({
   name: "user",
@@ -61,7 +68,7 @@ export const userSlice = createSlice({
     builder
       .addCase(profile.pending, (state) => {
         state.loading = true;
-        state.error = false;
+        state.error = null;
       })
       .addCase(profile.fulfilled, (state, action) => {
         state.loading = false;
@@ -71,31 +78,30 @@ export const userSlice = createSlice({
       })
       .addCase(updateProfile.pending, (state) => {
         state.loading = true;
-        state.error = false;
+        state.error = null;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.user = action.payload;
-        state.message = "Usuário atualizado com sucesso!"
+        state.message = "Usuário atualizado com sucesso!";
       })
       .addCase(updateProfile.rejected, (state, action) => {
-        console.log(state, action)
         state.loading = false;
         state.error = action.payload;
-        state.user = {};
+        state.user = null;
       })
       .addCase(getUserDetails.pending, (state) => {
         state.loading = true;
-        state.error = false;
+        state.error = null;
       })
       .addCase(getUserDetails.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
         state.user = action.payload;
-      })
+      });
   },
 });
 
