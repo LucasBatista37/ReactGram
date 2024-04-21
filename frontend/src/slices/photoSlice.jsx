@@ -44,8 +44,10 @@ export const getUserPhotos = createAsyncThunk(
 );
 
 // Get photo
-export const getPhoto = createAsyncThunk("photo/getphoto", async (id) => {
-  const data = await photoService.getPhoto(id);
+export const getPhoto = createAsyncThunk("photo/getphoto", async (id, thunkAPI) => {
+  const token = thunkAPI.getState().auth.user.token;
+
+  const data = await photoService.getPhoto(id, token);
 
   return data;
 });
@@ -106,12 +108,12 @@ export const like = createAsyncThunk("photo/like", async (id, thunkAPI) => {
 // Add comment to a photo
 export const comment = createAsyncThunk(
   "photo/comment",
-  async (photoData, thunkAPI) => {
+  async (commentData, thunkAPI) => {
     const token = thunkAPI.getState().auth.user.token;
 
     const data = await photoService.comment(
-      { comment: photoData.comment },
-      photoData.id,
+      { comment: commentData.comment },
+      commentData.id,
       token
     );
 
