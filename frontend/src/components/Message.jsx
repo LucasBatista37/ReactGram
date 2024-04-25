@@ -1,6 +1,6 @@
 import './Message.css'
 
-const Message = ({ msg, type }) => { // Corrigido para desestruturar as propriedades corretamente
+const Message = ({ msg, type }) => { 
   return (
     <div className={`message ${type}`}>
         <p>{msg}</p>
