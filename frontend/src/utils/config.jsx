@@ -1,5 +1,5 @@
-export const api = "https://backendnovo3.onrender.com/api";
-export const uploads = "https://backendnovo3.onrender.com/uploads";
+export const api = "https://back-end-remanescent.onrender.com/api";
+export const uploads = "https://back-end-remanescent.onrender.com/uploads";
 
 export const requestConfig = (method, data, token = null, image = null) => {
   let config;
