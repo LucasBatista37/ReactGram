@@ -128,70 +128,61 @@ const updatePhoto = async (req, res) => {
   res.status(200).json({ photo, message: "Foto atualizada com sucesso!" });
 };
 
-//Like functionality
 const likePhoto = async (req, res) => {
   const { id } = req.params;
+  const userId = req.user._id; // ID do usuário que está curtindo a foto
 
-  const reqUser = req.user;
+  try {
+    const photo = await Photo.findById(id);
 
-  const photo = await Photo.findById(id);
+    if (!photo) {
+      return res.status(404).json({ errors: ["Foto não encontrada!"] });
+    }
 
-  // Check if photo exists
-  if (!photo) {
-    res.status(404).json({ errors: ["Foto não encontrada!"] });
-    return;
+    // Verifica se o usuário já curtiu a foto
+    if (photo.likes.includes(userId)) {
+      return res.status(422).json({ errors: ["Você já curtiu esta foto."] });
+    }
+
+    // Incrementa o número de curtidas e salva a foto
+    photo.likes.push(userId);
+    await photo.save();
+
+    res.status(200).json({ photoId: id, userId, message: "A foto foi curtida!" });
+  } catch (error) {
+    console.error("Erro ao curtir a foto:", error);
+    res.status(500).json({ errors: ["Erro interno do servidor."] });
   }
-
-  // Check if user already liked the photo
-  if (photo.likes.includes(reqUser._id)) {
-    res.status(422).json({ errors: ["Você já curtiu esta foto."] });
-    return;
-  }
-
-  // Put user id in array of likes
-  photo.likes.push(reqUser._id);
-
-  await photo.save();
-
-  res
-    .status(200)
-    .json({ photoId: id, userId: reqUser._id, message: "A foto foi curtida!" });
 };
 
-// Comment functionality
-// Comment functionality
 const commentPhoto = async (req, res) => {
   const { id } = req.params;
   const { comment } = req.body;
+  const userId = req.user._id; // ID do usuário que está comentando
 
-  const reqUser = req.user;
+  try {
+    const photo = await Photo.findById(id);
 
-  const user = await User.findById(reqUser._id);
+    if (!photo) {
+      return res.status(404).json({ errors: ["Foto não encontrada!"] });
+    }
 
-  const photo = await Photo.findById(id);
+    // Adiciona o comentário ao array de comentários da foto
+    const user = await User.findById(userId);
+    const userComment = {
+      comment,
+      userName: user.name,
+      userImage: user.profileImage,
+      userId,
+    };
+    photo.comments.push(userComment);
+    await photo.save();
 
-  // Check if photo exists
-  if (!photo) {
-    res.status(404).json({ errors: ["Foto não encontrada!"] });
-    return;
+    res.status(200).json({ comment: userComment, message: "Comentário adicionado com sucesso!" });
+  } catch (error) {
+    console.error("Erro ao adicionar comentário à foto:", error);
+    res.status(500).json({ errors: ["Erro interno do servidor."] });
   }
-
-  // Put comment in the array of comments
-  const userComment = {
-    comment,
-    userName: user.name,
-    userImage: user.profileImage,
-    userId: user._id,
-  };
-
-  photo.comments.push(userComment);
-
-  await photo.save();
-
-  res.status(200).json({
-    comment: userComment,
-    message: "Comentário adicionado com sucesso!",
-  });
 };
 
 // Search a photo by title

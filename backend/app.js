@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 // Upload directory
-app.use(cors({ credentials: true, origin: "https://front-end-remanescente.vercel.app" }));
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
 // Uploads directory
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
