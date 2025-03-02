@@ -46,7 +46,7 @@ Nesta aplicação, é possível **fazer cadastro e login**, **criar postagens**,
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/reactgram.git
+git clone https://github.com/LucasBatista37/ReactGram.git
 cd reactgram
 ```
 
@@ -65,7 +65,9 @@ reactgram/
 └── README.md
 ```
 
-### 3. Configurar Variáveis de Ambiente 1. Na pasta `backend`, crie um arquivo chamado `.env` no mesmo nível de `package.json`. 2. Copie o conteúdo de `.env.example` e substitua pelos valores reais. Exemplo:
+### 3. Configurar Variáveis de Ambiente 1. 
+
+Na pasta `backend`, crie um arquivo chamado `.env` no mesmo nível de `package.json`. 2. Copie o conteúdo de `.env.example` e substitua pelos valores reais. Exemplo:
 
 ```bash
    PORT=5000
