@@ -7,10 +7,7 @@ Nesta aplicação, é possível **fazer cadastro e login**, **criar postagens**,
 
 ## :camera_flash: Demonstração
 
-
-```md
 ![ReactGram Preview](../frontend/src/reactgram.png)
-```
 
 ---
 
